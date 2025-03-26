@@ -1,1 +1,4 @@
-int = 1;
+#include <stdio.h>
+int main(){
+   int = 1;
+}
