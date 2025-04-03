@@ -6,7 +6,6 @@
 //./APP1-SEC2-LPP-STGO pls (en la terminal, para ejecutar)
 
 //10 distintas metricas
-
 //Pizza mas vendida
 void pms() {
    printf("Llamaste a pms\n");
@@ -43,7 +42,7 @@ void hp() {
 typedef struct {
    double PizzaId;
    double OrdenId;
-   char PizzaNameId[100];
+   char PizzaNameId[50];
    double Cantidad;
    char Fecha[100];
    char Hora[100];
@@ -58,13 +57,10 @@ typedef struct {
 int main(int argc, char *argv[]) {
    //declaracion de variables
    int args = argc;
-   char *argArr[args];
+   char **argArr = argv;
    char lenLinea[800];
    int len = 0;
    int registro = 0;
-   for (int i = 0; i < args; i++){
-      argArr[i] = argv[i];
-   }
 
    //proceso para tener una variable que muestre la cantidad de lineas que tiene el csv (len)
    FILE *lala;
@@ -86,9 +82,10 @@ int main(int argc, char *argv[]) {
          skip = 0;
          continue;
       }
-      fscanf(data, "%lf, %lf\n", &compras[registro].PizzaId, &compras[registro].OrdenId);
+      fscanf(data, "%lf, %lf, %49[^,]\n", &compras[registro].PizzaId, &compras[registro].OrdenId, compras[registro].PizzaNameId);
       //printf("%lf\n",compras[registro].PizzaId);
       //printf("%lf\n",compras[registro].OrdenId);
+      //printf("%s\n",compras[registro].PizzaNameId);
       if(registro == len-1){
          break;
       }
@@ -96,30 +93,32 @@ int main(int argc, char *argv[]) {
    } while (fgets(lenLinea, sizeof(lenLinea), data));
    fclose(data);
 
+   //printf("%s\n", argArr[1]);
+
    //procesar el(los) input(s) del usuario, y llamar a la(s) funcion(es)
    for (int i = 1; i < args; i++) {
-      if (strcmp(argv[i], "pms") == 0) {
+      if (strcmp(argArr[i], "pms") == 0) {
          pms();
-      } else if (strcmp(argv[i], "pls") == 0) {
+      } else if (strcmp(argArr[i], "pls") == 0) {
          pls();
-      } else if (strcmp(argv[i], "dms") == 0) {
+      } else if (strcmp(argArr[i], "dms") == 0) {
          dms();
-      } else if (strcmp(argv[i], "dls") == 0) {
+      } else if (strcmp(argArr[i], "dls") == 0) {
          dls();
-      } else if (strcmp(argv[i], "dmsp") == 0) {
+      } else if (strcmp(argArr[i], "dmsp") == 0) {
          dmsp();
-      } else if (strcmp(argv[i], "dlsp") == 0) {
+      } else if (strcmp(argArr[i], "dlsp") == 0) {
          dlsp();
-      } else if (strcmp(argv[i], "apo") == 0) {
+      } else if (strcmp(argArr[i], "apo") == 0) {
          apo();
-      } else if (strcmp(argv[i], "apd") == 0) {
+      } else if (strcmp(argArr[i], "apd") == 0) {
          apd();
-      } else if (strcmp(argv[i], "ims") == 0) {
+      } else if (strcmp(argArr[i], "ims") == 0) {
          ims();
-      } else if (strcmp(argv[i], "hp") == 0) {
+      } else if (strcmp(argArr[i], "hp") == 0) {
          hp();
       }  else {
-         printf("%s No es un comando\n", argv[i]);
+         printf("%s No es un comando\n", argArr[i]);
       }
    }
    return 0;
