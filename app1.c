@@ -44,11 +44,11 @@ typedef struct {
    double OrdenId;
    char PizzaNameId[50];
    double Cantidad;
-   char Fecha[100];
-   char Hora[100];
+   char Fecha[50];
+   char Hora[50];
    double PrecioUnitario;
    double PrecioTotal;
-   char Tamanio;
+   char Tamanio[50];
    char Categoria[100];
    char Ingredientes[300];
    char Nombre[100];
@@ -82,18 +82,23 @@ int main(int argc, char *argv[]) {
          skip = 0;
          continue;
       }
-      fscanf(data, "%lf, %lf, %49[^,]\n", &compras[registro].PizzaId, &compras[registro].OrdenId, compras[registro].PizzaNameId);
-      //printf("%lf\n",compras[registro].PizzaId);
-      //printf("%lf\n",compras[registro].OrdenId);
-      //printf("%s\n",compras[registro].PizzaNameId);
+      fscanf(data, "%lf, %lf, %49[^,], %lf, %49[^,], %49[^,], %lf, %lf, %49[^,], %49[^,]\n", 
+         &compras[registro].PizzaId, 
+         &compras[registro].OrdenId, 
+         compras[registro].PizzaNameId, 
+         &compras[registro].Cantidad, 
+         compras[registro].Fecha, 
+         compras[registro].Hora, 
+         &compras[registro].PrecioUnitario, 
+         &compras[registro].PrecioTotal,
+         compras[registro].Tamanio, 
+         compras[registro].Categoria);
       if(registro == len-1){
          break;
       }
       registro++;
    } while (fgets(lenLinea, sizeof(lenLinea), data));
-   fclose(data);
-
-   //printf("%s\n", argArr[1]);
+   printf("makako\n");
 
    //procesar el(los) input(s) del usuario, y llamar a la(s) funcion(es)
    for (int i = 1; i < args; i++) {
@@ -121,5 +126,6 @@ int main(int argc, char *argv[]) {
          printf("%s No es un comando\n", argArr[i]);
       }
    }
+   fclose(data);
    return 0;
 }
