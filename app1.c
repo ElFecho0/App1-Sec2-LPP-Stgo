@@ -6,6 +6,8 @@
 //./APP1-SEC2-LPP-STGO pls (en la terminal, para ejecutar)
 
 //10 distintas metricas
+
+//Pizza mas vendida
 void pms() {
    printf("Llamaste a pms\n");
 }
@@ -37,6 +39,7 @@ void hp() {
    printf("Llamaste a hp\n");
 }
 
+//Un struct por cada linea que tenga el csv
 typedef struct {
    double PizzaId;
    double OrdenId;
@@ -52,55 +55,49 @@ typedef struct {
    char Nombre[100];
 } Compra;
 
-typedef struct {
-   double pepe;
-} ete;
-
 int main(int argc, char *argv[]) {
+   //declaracion de variables
+   int args = argc;
+   char *argArr[args];
    char lenLinea[800];
    int len = 0;
-   int leer = 0;
    int registro = 0;
+   for (int i = 0; i < args; i++){
+      argArr[i] = argv[i];
+   }
 
+   //proceso para tener una variable que muestre la cantidad de lineas que tiene el csv (len)
    FILE *lala;
    lala = fopen("datos.csv","r");
    fgets(lenLinea, sizeof(lenLinea), lala);
    while (fgets(lenLinea, sizeof(lenLinea), lala)) {
-      len++;  // Increment the row count for each line read
+      len++;
    }
    fclose(lala);
 
-   //printf("%i\n", len);
-   ete waza[len-1];
+   //proceso para leer cada linea del csv, y almacenarlas en structs, donde cada atributo del mismo es una columna del csv
    Compra compras[len-1];
    FILE *data;
    data = fopen("datos.csv","r");
-   //fgets(lenLinea, sizeof(lenLinea), data);
-   //printf("%s", lenLinea);
-
-   while (fgets(lenLinea, sizeof(lenLinea), data)) {
-      //printf("%s", lenLinea);
-      int leer = 0;
-      leer = fscanf(data, "%lf", &waza[registro].pepe);
-      //printf("%lf\n",waza[registro].pepe);
-      //printf("leer es %i\n",leer);
+   int skip = 1;
+   do
+   {
+      if(skip == 1){
+         skip = 0;
+         continue;
+      }
+      fscanf(data, "%lf, %lf\n", &compras[registro].PizzaId, &compras[registro].OrdenId);
+      //printf("%lf\n",compras[registro].PizzaId);
+      //printf("%lf\n",compras[registro].OrdenId);
       if(registro == len-1){
          break;
       }
-      if (leer == 1){
-         registro++;
-      }
-      //printf("%i\n",leer);
-      //printf("%s",lenLinea);
-   }
+      registro++;
+   } while (fgets(lenLinea, sizeof(lenLinea), data));
    fclose(data);
 
-   
-   for(int i = 0; i < len; i++){
-      printf("%lf\n", waza[i].pepe);
-   }
-   //procesar el input del usuario, y llamar a las funciones
-   for (int i = 1; i < argc; i++) {
+   //procesar el(los) input(s) del usuario, y llamar a la(s) funcion(es)
+   for (int i = 1; i < args; i++) {
       if (strcmp(argv[i], "pms") == 0) {
          pms();
       } else if (strcmp(argv[i], "pls") == 0) {
