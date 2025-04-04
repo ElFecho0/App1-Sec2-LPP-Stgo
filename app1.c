@@ -12,6 +12,7 @@
 //Pizza mas vendida
 void pms() {
    printf("Llamaste a pms\n");
+   printf("Llamaste a pms\n");
 }
 void pls() {
    printf("Llamaste a pls\n");
