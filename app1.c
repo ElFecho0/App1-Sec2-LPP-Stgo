@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_STRING_LENGTH 300
 
 //gcc -o APP1-SEC2-LPP-STGO app1.c (en la terminal, para poder llamar funciones desde la terminal)
 //./APP1-SEC2-LPP-STGO pls (en la terminal, para ejecutar)
@@ -58,47 +61,75 @@ int main(int argc, char *argv[]) {
    //declaracion de variables
    int args = argc;
    char **argArr = argv;
-   char lenLinea[800];
-   int len = 0;
+   char lenLinea[2048];
    int registro = 0;
 
-   //proceso para tener una variable que muestre la cantidad de lineas que tiene el csv (len)
-   FILE *lala;
-   lala = fopen("datos.csv","r");
-   fgets(lenLinea, sizeof(lenLinea), lala);
-   while (fgets(lenLinea, sizeof(lenLinea), lala)) {
-      len++;
-   }
-   fclose(lala);
-
    //proceso para leer cada linea del csv, y almacenarlas en structs, donde cada atributo del mismo es una columna del csv
-   Compra compras[len-1];
+   Compra compras[100];
    FILE *data;
    data = fopen("datos.csv","r");
-   int skip = 1;
-   do
-   {
-      if(skip == 1){
-         skip = 0;
-         continue;
+
+   if (fgets(lenLinea, sizeof(lenLinea), data) == NULL) {
+      perror("Failed to read header");
+      fclose(data);
+      return -1;
+   }
+
+   while (fgets(lenLinea, 2048, data)) {
+      char *start = lenLinea;
+      char *end;
+
+      compras[registro].PizzaId = strtod(start, &end);
+      start = end + 1;
+
+      compras[registro].OrdenId = strtod(start, &end);
+      start = end + 1;
+
+      sscanf(start, "%49[^,]", compras[registro].PizzaNameId);
+      start = strchr(start, ',') + 1;
+
+      compras[registro].Cantidad = strtod(start, &end);
+      start = end + 1;
+
+      sscanf(start, "%49[^,]", compras[registro].Fecha);
+      start = strchr(start, ',') + 1;
+
+      sscanf(start, "%49[^,]", compras[registro].Hora);
+      start = strchr(start, ',') + 1;
+
+      compras[registro].PrecioUnitario = strtod(start, &end);
+      start = end + 1;
+
+      compras[registro].PrecioTotal = strtod(start, &end);
+      start = end + 1;
+
+      sscanf(start, "%49[^,]", compras[registro].Tamanio);
+      start = strchr(start, ',') + 1;
+
+      sscanf(start, "%99[^,]", compras[registro].Categoria);
+      start = strchr(start, ',') + 1;
+
+      if (*start == '"') {
+         start++; 
+         end = strstr(start, "\","); 
+         if (end) {
+            size_t leng = end - start;
+            if (leng >= MAX_STRING_LENGTH) leng = MAX_STRING_LENGTH - 1;
+            strncpy(compras[registro].Ingredientes, start, leng);
+            compras[registro].Ingredientes[leng] = '\0';
+            start = end + 2; 
+         } else {
+            strcpy(compras[registro].Ingredientes, ""); 
+         }
+      } else {
+         sscanf(start, "%299[^,]", compras[registro].Ingredientes);
+         start = strchr(start, ',') + 1;
       }
-      fscanf(data, "%lf, %lf, %49[^,], %lf, %49[^,], %49[^,], %lf, %lf, %49[^,], %49[^,]\n", 
-         &compras[registro].PizzaId, 
-         &compras[registro].OrdenId, 
-         compras[registro].PizzaNameId, 
-         &compras[registro].Cantidad, 
-         compras[registro].Fecha, 
-         compras[registro].Hora, 
-         &compras[registro].PrecioUnitario, 
-         &compras[registro].PrecioTotal,
-         compras[registro].Tamanio, 
-         compras[registro].Categoria);
-      if(registro == len-1){
-         break;
-      }
+
+      sscanf(start, "%99[^\n]", compras[registro].Nombre);
       registro++;
-   } while (fgets(lenLinea, sizeof(lenLinea), data));
-   printf("makako\n");
+   }
+   fclose(data);
 
    //procesar el(los) input(s) del usuario, y llamar a la(s) funcion(es)
    for (int i = 1; i < args; i++) {
@@ -126,6 +157,5 @@ int main(int argc, char *argv[]) {
          printf("%s No es un comando\n", argArr[i]);
       }
    }
-   fclose(data);
    return 0;
 }
