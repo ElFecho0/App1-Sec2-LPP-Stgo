@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
-
 #define MAX_STRING_LENGTH 300
-
-//gcc -o app1 app1.c (en la terminal, para poder llamar funciones desde la terminal)
-//./app1 datos.csv *metrica* (en la terminal, para ejecutar)
 
 //Un struct por cada linea que tenga el csv, cada atributo del struct es una columna del csv
 typedef struct {
@@ -22,11 +17,12 @@ typedef struct {
    char Categoria[100];
    char Ingredientes[300];
    char Nombre[100];
-} Compra;
+} order;
 
-//10 distintas metricas:
+//Segmento 1: 10 distintas metricas:
+
 //Pizza mas vendida
-void pms(Compra compras[], int registro) {
+void pms( order orders[], int registro) {
     typedef struct {
         char nombre[50];
         double total_vendida;
@@ -37,15 +33,15 @@ void pms(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_pizzas; j++) {
-            if (strcmp(compras[i].PizzaNameId, ventas[j].nombre) == 0) {
-                ventas[j].total_vendida += compras[i].Cantidad;
+            if (strcmp(orders[i].PizzaNameId, ventas[j].nombre) == 0) {
+                ventas[j].total_vendida += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(ventas[total_pizzas].nombre, compras[i].PizzaNameId);
-            ventas[total_pizzas].total_vendida = compras[i].Cantidad;
+            strcpy(ventas[total_pizzas].nombre, orders[i].PizzaNameId);
+            ventas[total_pizzas].total_vendida = orders[i].Cantidad;
             total_pizzas++;
         }
     }
@@ -62,7 +58,7 @@ void pms(Compra compras[], int registro) {
     printf("La pizza más vendida fue: %s con un total de %.0f unidades vendidas.\n", pizza_mas_vendida, max_cantidad);
 }
 //Pizza menos vendida
-void pls(Compra compras[], int registro) {
+void pls(order orders[], int registro) {
     typedef struct {
         char nombre[50];
         double total_vendida;
@@ -73,15 +69,15 @@ void pls(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_pizzas; j++) {
-            if (strcmp(compras[i].PizzaNameId, ventas[j].nombre) == 0) {
-                ventas[j].total_vendida += compras[i].Cantidad;
+            if (strcmp(orders[i].PizzaNameId, ventas[j].nombre) == 0) {
+                ventas[j].total_vendida += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(ventas[total_pizzas].nombre, compras[i].PizzaNameId);
-            ventas[total_pizzas].total_vendida = compras[i].Cantidad;
+            strcpy(ventas[total_pizzas].nombre, orders[i].PizzaNameId);
+            ventas[total_pizzas].total_vendida = orders[i].Cantidad;
             total_pizzas++;
         }
     }
@@ -90,7 +86,6 @@ void pls(Compra compras[], int registro) {
     double min_cantidad = ventas[0].total_vendida;
     char pizza_menos_vendida[50];
     strcpy(pizza_menos_vendida, ventas[0].nombre);
-
     for (int i = 1; i < total_pizzas; i++) {
         if (ventas[i].total_vendida < min_cantidad) {
             min_cantidad = ventas[i].total_vendida;
@@ -100,7 +95,7 @@ void pls(Compra compras[], int registro) {
     printf("La pizza menos vendida fue: %s con un total de %.0f unidades vendidas.\n", pizza_menos_vendida, min_cantidad);
 }
 //Fecha con mas ventas
-void dms(Compra compras[], int registro) {
+void dms(order orders[], int registro) {
     typedef struct {
         char fecha[50];
         double total_dinero;
@@ -111,15 +106,15 @@ void dms(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_fechas; j++) {
-            if (strcmp(compras[i].Fecha, ventas[j].fecha) == 0) {
-                ventas[j].total_dinero += compras[i].PrecioTotal;
+            if (strcmp(orders[i].Fecha, ventas[j].fecha) == 0) {
+                ventas[j].total_dinero += orders[i].PrecioTotal;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(ventas[total_fechas].fecha, compras[i].Fecha);
-            ventas[total_fechas].total_dinero = compras[i].PrecioTotal;
+            strcpy(ventas[total_fechas].fecha, orders[i].Fecha);
+            ventas[total_fechas].total_dinero = orders[i].PrecioTotal;
             total_fechas++;
         }
     }
@@ -137,7 +132,7 @@ void dms(Compra compras[], int registro) {
     printf("La fecha con mayor dinero recaudado fue: %s con un total de $%.2f\n", fecha_top, max_dinero);
 }
 //Fecha con menos ventas
-void dls(Compra compras[], int registro) {
+void dls(order orders[], int registro) {
     typedef struct {
         char fecha[50];
         double total_dinero;
@@ -148,15 +143,15 @@ void dls(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_fechas; j++) {
-            if (strcmp(compras[i].Fecha, ventas[j].fecha) == 0) {
-                ventas[j].total_dinero += compras[i].PrecioTotal;
+            if (strcmp(orders[i].Fecha, ventas[j].fecha) == 0) {
+                ventas[j].total_dinero += orders[i].PrecioTotal;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(ventas[total_fechas].fecha, compras[i].Fecha);
-            ventas[total_fechas].total_dinero = compras[i].PrecioTotal;
+            strcpy(ventas[total_fechas].fecha, orders[i].Fecha);
+            ventas[total_fechas].total_dinero = orders[i].PrecioTotal;
             total_fechas++;
         }
     }
@@ -174,7 +169,7 @@ void dls(Compra compras[], int registro) {
     printf("La fecha con menor dinero recaudado fue: %s con un total de $%.2f\n", fecha_menos, min_dinero);
 }
 //Fecha con mas cantidad de pizzas vendidas
-void dmsp(Compra compras[], int registro) {
+void dmsp(order orders[], int registro) {
     typedef struct {
         char fecha[50];
         double total_pizzas;
@@ -185,15 +180,15 @@ void dmsp(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_fechas; j++) {
-            if (strcmp(compras[i].Fecha, ventas[j].fecha) == 0) {
-                ventas[j].total_pizzas += compras[i].Cantidad;
+            if (strcmp(orders[i].Fecha, ventas[j].fecha) == 0) {
+                ventas[j].total_pizzas += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(ventas[total_fechas].fecha, compras[i].Fecha);
-            ventas[total_fechas].total_pizzas = compras[i].Cantidad;
+            strcpy(ventas[total_fechas].fecha, orders[i].Fecha);
+            ventas[total_fechas].total_pizzas = orders[i].Cantidad;
             total_fechas++;
         }
     }
@@ -211,7 +206,7 @@ void dmsp(Compra compras[], int registro) {
     printf("La fecha con más pizzas vendidas fue: %s con un total de %.0f pizzas.\n", fecha_max, max_pizzas);
 }
 //Fecha con menor cantidad de pizzas vendidas
-void dlsp(Compra compras[], int registro) {
+void dlsp(order orders[], int registro) {
     typedef struct {
         char fecha[50];
         double total_pizzas;
@@ -222,15 +217,15 @@ void dlsp(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_fechas; j++) {
-            if (strcmp(compras[i].Fecha, ventas[j].fecha) == 0) {
-                ventas[j].total_pizzas += compras[i].Cantidad;
+            if (strcmp(orders[i].Fecha, ventas[j].fecha) == 0) {
+                ventas[j].total_pizzas += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(ventas[total_fechas].fecha, compras[i].Fecha);
-            ventas[total_fechas].total_pizzas = compras[i].Cantidad;
+            strcpy(ventas[total_fechas].fecha, orders[i].Fecha);
+            ventas[total_fechas].total_pizzas = orders[i].Cantidad;
             total_fechas++;
         }
     } 
@@ -249,7 +244,7 @@ void dlsp(Compra compras[], int registro) {
     printf("La fecha con menos pizzas vendidas fue: %s con un total de %.0f pizzas.\n", fecha_min, min_pizzas);
 }
 //Promedio de pizzar por orden
-void apo(Compra compras[], int registro) {
+void apo(order orders[], int registro) {
     typedef struct {
         int id_orden;
         double cantidad_total;
@@ -260,15 +255,15 @@ void apo(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_ordenes; j++) {
-            if ((int)compras[i].OrdenId == ordenes[j].id_orden) {
-                ordenes[j].cantidad_total += compras[i].Cantidad;
+            if ((int)orders[i].OrdenId == ordenes[j].id_orden) {
+                ordenes[j].cantidad_total += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            ordenes[total_ordenes].id_orden = (int)compras[i].OrdenId;
-            ordenes[total_ordenes].cantidad_total = compras[i].Cantidad;
+            ordenes[total_ordenes].id_orden = (int)orders[i].OrdenId;
+            ordenes[total_ordenes].cantidad_total = orders[i].Cantidad;
             total_ordenes++;
         }
     }
@@ -282,7 +277,7 @@ void apo(Compra compras[], int registro) {
     printf("Promedio de pizzas por orden: %.2f\n", promedio);
 }
 //Promedio pizzas por dia
-void apd(Compra compras[], int registro) {
+void apd(order orders[], int registro) {
     typedef struct {
         char fecha[50];
         double cantidad_total;
@@ -293,15 +288,15 @@ void apd(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_dias; j++) {
-            if (strcmp(compras[i].Fecha, dias[j].fecha) == 0) {
-                dias[j].cantidad_total += compras[i].Cantidad;
+            if (strcmp(orders[i].Fecha, dias[j].fecha) == 0) {
+                dias[j].cantidad_total += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(dias[total_dias].fecha, compras[i].Fecha);
-            dias[total_dias].cantidad_total = compras[i].Cantidad;
+            strcpy(dias[total_dias].fecha, orders[i].Fecha);
+            dias[total_dias].cantidad_total = orders[i].Cantidad;
             total_dias++;
         }
     }
@@ -315,7 +310,7 @@ void apd(Compra compras[], int registro) {
     printf("Promedio de pizzas vendidas por día: %.2f\n", promedio);
 }
 //Ingrediente mas vendido
-void ims(Compra compras[], int registro) {
+void ims(order orders[], int registro) {
     typedef struct {
         char nombre[50];
         int cantidad;
@@ -326,11 +321,13 @@ void ims(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         // Copiamos los ingredientes porque strtok modifica el string
         char copia[300];
-        strcpy(copia, compras[i].Ingredientes);
+        strcpy(copia, orders[i].Ingredientes);
         char *token = strtok(copia, ",");
         while (token != NULL) {
             // Limpiar espacios al inicio
-            while (*token == ' ') token++;
+            while (*token == ' ') {
+                token++;
+            }
             int encontrado = 0;
             for (int j = 0; j < total_ingredientes; j++) {
                 if (strcmp(token, ingredientes[j].nombre) == 0) {
@@ -360,7 +357,7 @@ void ims(Compra compras[], int registro) {
     printf("Ingrediente más vendido: %s (apareció %d veces)\n", mas_usado, max);
 }
 //Cantidad de pizzas por categoria vendidas
-void hp(Compra compras[], int registro) {
+void hp(order orders[], int registro) {
     typedef struct {
         char categoria[100];
         double total_vendida;
@@ -371,15 +368,15 @@ void hp(Compra compras[], int registro) {
     for (int i = 0; i < registro; i++) {
         int encontrada = 0;
         for (int j = 0; j < total_categorias; j++) {
-            if (strcmp(compras[i].Categoria, categorias[j].categoria) == 0) {
-                categorias[j].total_vendida += compras[i].Cantidad;
+            if (strcmp(orders[i].Categoria, categorias[j].categoria) == 0) {
+                categorias[j].total_vendida += orders[i].Cantidad;
                 encontrada = 1;
                 break;
             }
         }
         if (!encontrada) {
-            strcpy(categorias[total_categorias].categoria, compras[i].Categoria);
-            categorias[total_categorias].total_vendida = compras[i].Cantidad;
+            strcpy(categorias[total_categorias].categoria, orders[i].Categoria);
+            categorias[total_categorias].total_vendida = orders[i].Cantidad;
             total_categorias++;
         }
     }
@@ -391,53 +388,57 @@ void hp(Compra compras[], int registro) {
 }
 
 int main(int argc, char *argv[]) {
+    //Segmento 2:
+    /*Proceso para leer cada linea del csv, parsear inteligentemente
+    y almacenarlas en structs, donde cada atributo del mismo es una columna del csv*/
+
     //Declaracion de variables
     int args = argc;
     char **argArr = argv;
     char lenLinea[2048];
     int registro = 0;
-    Compra compras[5000];
+    order orders[5000];
 
-    //proceso para leer cada linea del csv, y almacenarlas en structs, donde cada atributo del mismo es una columna del csv
-    FILE *data = fopen(argArr[1],"r");
-    if (fgets(lenLinea, sizeof(lenLinea), data) == NULL) {
+    //Se imprime la primera linea del csv
+    FILE *datos = fopen(argArr[1],"r");
+    if (fgets(lenLinea, sizeof(lenLinea), datos) == NULL) {
         perror("Intento Fallido al leer el csv");
-        fclose(data);
+        fclose(datos);
         return -1;
     }
-    //Parseo de todas las variables
-    while (fgets(lenLinea, 2048, data)) {
+    //Parseo para cada una de las 12 variables (o columnas) del csv
+    while (fgets(lenLinea, 2048, datos)) {
         char *inicioPars = lenLinea;
         char *finPars;
 
-        compras[registro].PizzaId = strtod(inicioPars, &finPars);
+        orders[registro].PizzaId = strtod(inicioPars, &finPars);
         inicioPars = finPars + 1;
 
-        compras[registro].OrdenId = strtod(inicioPars, &finPars);
+        orders[registro].OrdenId = strtod(inicioPars, &finPars);
         inicioPars = finPars + 1;
 
-        sscanf(inicioPars, "%49[^,]", compras[registro].PizzaNameId);
+        sscanf(inicioPars, "%49[^,]", orders[registro].PizzaNameId);
         inicioPars = strchr(inicioPars, ',') + 1;
 
-        compras[registro].Cantidad = strtod(inicioPars, &finPars);
+        orders[registro].Cantidad = strtod(inicioPars, &finPars);
         inicioPars = finPars + 1;
 
-        sscanf(inicioPars, "%49[^,]", compras[registro].Fecha);
+        sscanf(inicioPars, "%49[^,]", orders[registro].Fecha);
         inicioPars = strchr(inicioPars, ',') + 1;
 
-        sscanf(inicioPars, "%49[^,]", compras[registro].Hora);
+        sscanf(inicioPars, "%49[^,]", orders[registro].Hora);
         inicioPars = strchr(inicioPars, ',') + 1;
 
-        compras[registro].PrecioUnitario = strtod(inicioPars, &finPars);
+        orders[registro].PrecioUnitario = strtod(inicioPars, &finPars);
         inicioPars = finPars + 1;
 
-        compras[registro].PrecioTotal = strtod(inicioPars, &finPars);
+        orders[registro].PrecioTotal = strtod(inicioPars, &finPars);
         inicioPars = finPars + 1;
 
-        sscanf(inicioPars, "%49[^,]", compras[registro].Tamanio);
+        sscanf(inicioPars, "%49[^,]", orders[registro].Tamanio);
         inicioPars = strchr(inicioPars, ',') + 1;
 
-        sscanf(inicioPars, "%99[^,]", compras[registro].Categoria);
+        sscanf(inicioPars, "%99[^,]", orders[registro].Categoria);
         inicioPars = strchr(inicioPars, ',') + 1;
 
         if (*inicioPars == '"') {
@@ -445,43 +446,46 @@ int main(int argc, char *argv[]) {
             finPars = strstr(inicioPars, "\","); 
             if (finPars) {
                 size_t leng = finPars - inicioPars;
-                if (leng >= MAX_STRING_LENGTH) leng = MAX_STRING_LENGTH - 1;
-                strncpy(compras[registro].Ingredientes, inicioPars, leng);
-                compras[registro].Ingredientes[leng] = '\0';
+                if (leng >= MAX_STRING_LENGTH) {
+                    leng = MAX_STRING_LENGTH - 1;
+                }
+                strncpy(orders[registro].Ingredientes, inicioPars, leng);
+                orders[registro].Ingredientes[leng] = '\0';
                 inicioPars = finPars + 2; 
             } else {
-                strcpy(compras[registro].Ingredientes, ""); 
+                strcpy(orders[registro].Ingredientes, ""); 
             }
         } else {
-            sscanf(inicioPars, "%299[^,]", compras[registro].Ingredientes);
+            sscanf(inicioPars, "%299[^,]", orders[registro].Ingredientes);
             inicioPars = strchr(inicioPars, ',') + 1;
         }
-        sscanf(inicioPars, "%99[^\n]", compras[registro].Nombre);
+        sscanf(inicioPars, "%99[^\n]", orders[registro].Nombre);
         registro++;
-    } fclose(data);
+    } fclose(datos);
 
+    //Segmento 3:
     //procesar el(los) input(s) del usuario, y llamar a la(s) funcion(es)
     for (int i = 2; i < args; i++) {
         if (strcmp(argArr[i], "pms") == 0) {
-            pms(compras, registro);
+            pms(orders, registro);
         } else if (strcmp(argArr[i], "pls") == 0) {
-            pls(compras, registro);
+            pls(orders, registro);
         } else if (strcmp(argArr[i], "dms") == 0) {
-            dms(compras, registro);
+            dms(orders, registro);
         } else if (strcmp(argArr[i], "dls") == 0) {
-            dls(compras, registro);
+            dls(orders, registro);
         } else if (strcmp(argArr[i], "dmsp") == 0) {
-            dmsp(compras, registro);
+            dmsp(orders, registro);
         } else if (strcmp(argArr[i], "dlsp") == 0) {
-            dlsp(compras, registro);
+            dlsp(orders, registro);
         } else if (strcmp(argArr[i], "apo") == 0) {
-            apo(compras, registro);
+            apo(orders, registro);
         } else if (strcmp(argArr[i], "apd") == 0) {
-            apd(compras, registro);
+            apd(orders, registro);
         } else if (strcmp(argArr[i], "ims") == 0) {
-            ims(compras, registro);
+            ims(orders, registro);
         } else if (strcmp(argArr[i], "hp") == 0) {
-            hp(compras, registro);
+            hp(orders, registro);
         }  else {
             printf("%s No es un comando\n", argArr[i]);
         }
